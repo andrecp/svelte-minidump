@@ -1,21 +1,12 @@
 <script>
     import { Table } from "sveltestrap";
-    let frames = [
-        {
-            id: 0,
-            trust: "context",
-            module: "xul.dll",
-            source: "wrapers.cpp:18",
-            signature: "RustMozCrash(char const*, int, char const*)",
-        },
-    ];
+    export let frames = [];
 </script>
 
 <Table striped>
     <thead>
         <tr>
             <th>Frame</th>
-            <th>Trust</th>
             <th>Module</th>
             <th>Source</th>
             <th>Signature</th>
@@ -24,11 +15,14 @@
     <tbody>
         {#each frames as frame}
             <tr>
-                <td>{frame.id}</td>
-                <td>{frame.trust}</td>
-                <td>{frame.module}</td>
-                <td>{frame.source}</td>
-                <td>{frame.signature}</td>
+                <td>{frame.frame}</td>
+                <td>{frame.module ? frame.module : ""}</td>
+                <td
+                    >{frame.file ? frame.file : ""}{frame.line
+                        ? ":" + frame.line
+                        : ""}</td
+                >
+                <td>{frame.function ? frame.function : ""}</td>
             </tr>
         {/each}
     </tbody>

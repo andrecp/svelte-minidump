@@ -10,11 +10,13 @@
 		return await response.json();
 	})();
 	fetchDump.then(function (result) {
-		console.log(result.crash_info); // "Some User token"
+		console.log(result); // "Some User token"
 	});
+
+	const threadIdx = 0;
 </script>
 
-<Container>
+<Container fluid>
 	{#await fetchDump}
 		<p>Getting the data...</p>
 	{:then fetchDump}
@@ -27,13 +29,17 @@
 				/>
 			</Col>
 			<Col>
-				<Thread />
+				<Thread
+					threadName={fetchDump.crashing_thread.thread_name}
+					threadIndex={fetchDump.crashing_thread.threads_index}
+					threads={fetchDump.threads}
+				/>
 				<Frame />
 			</Col>
 		</Row>
 		<Row>
 			<Col>
-				<Frames />
+				<Frames frames={fetchDump.threads[threadIdx].frames} />
 			</Col>
 		</Row>
 	{:catch error}

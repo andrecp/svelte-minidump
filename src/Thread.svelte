@@ -6,22 +6,38 @@
         DropdownItem,
         Table,
     } from "sveltestrap";
-    let threadName = "WRRenderBackend#1 (29995)";
-    let last_error_value = "ERROR_SUCCESS";
+    export let threadName;
+    export let threadIndex;
+    export let threads;
 </script>
 
 <h2>Thread</h2>
 <Dropdown>
-    <DropdownToggle caret>{threadName}</DropdownToggle>
+    <DropdownToggle caret
+        >{threadName ? threadName : threadIndex}</DropdownToggle
+    >
     <DropdownMenu>
-        <DropdownItem>Another thread</DropdownItem>
+        {#each threads as thread, idx}
+            <DropdownItem>{thread.name ? thread.name : idx}</DropdownItem>
+        {/each}
     </DropdownMenu>
 </Dropdown>
 <Table striped>
     <tbody>
         <tr>
             <td>Last Error Value</td>
-            <td>{last_error_value}</td>
+            <td
+                >{threads[threadIndex].last_error_value
+                    ? threads[threadIndex].last_error_value
+                    : "n/a"}</td
+            >
         </tr>
     </tbody>
 </Table>
+
+<style>
+    :global(.dropdown-menu) {
+        max-height: 280px;
+        overflow-y: auto;
+    }
+</style>

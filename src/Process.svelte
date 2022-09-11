@@ -44,3 +44,10 @@
         </tr>
     </tbody>
 </Table>
+
+<style>
+    .table td,
+    .table th {
+        min-width: 100px;
+    }
+</style>
