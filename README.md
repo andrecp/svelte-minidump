@@ -1,5 +1,8 @@
 # svelte app
 
+
+![Screenshot](/data/screenshot.png?raw=true "Screenshot")
+
 This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
 
 To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
@@ -54,8 +57,8 @@ If you're building a single-page app (SPA) with multiple routes, sirv needs to b
 "start": "sirv public --single"
 ```
 
-## Running a side python server
+## Running a side server
 
-I'm running a simple python server that serves a JSON file with the output of https://github.com/rust-minidump/rust-minidump for test purposes. It expects a `data.json` with the output of `minidump-stackwalk`
+I'm running a simple node server that serves a JSON file with the output of https://github.com/rust-minidump/rust-minidump for test purposes. It expects a `data.json` with the output of `minidump-stackwalk` in the `public` folder.
 
-`./run_server_with_mock_json` (by default port 8000)
+`node server.js`

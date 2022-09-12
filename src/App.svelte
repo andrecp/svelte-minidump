@@ -12,7 +12,7 @@
 	let crashDump;
 	let _selectThreadIdx;
 	async function getData() {
-		const response = await fetch("http://localhost:8000/data.json");
+		const response = await fetch("/data");
 		const response_json = await response.json();
 		selectedThreadIdx.set(response_json.crashing_thread.threads_index);
 		_selectThreadIdx = response_json.crashing_thread.threads_index;
