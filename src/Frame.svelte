@@ -28,13 +28,7 @@
     };
 </script>
 
-<h2>Frame</h2>
-<Dropdown>
-    <DropdownToggle caret>{frameName}</DropdownToggle>
-    <DropdownMenu>
-        <DropdownItem>Another frame</DropdownItem>
-    </DropdownMenu>
-</Dropdown>
+<h2>Crashing thread registers</h2>
 <Table striped>
     <tbody>
         {#each Object.entries(registers).sort((a, b) => a[0] - b[0]) as [name, content]}
@@ -47,9 +41,15 @@
 </Table>
 
 <style>
+    :global(.dropdown) {
+        display: inline;
+    }
+    h2 {
+        display: inline;
+    }
     tbody {
         overflow-y: scroll;
-        height: 120px;
+        height: 220px;
         position: absolute;
     }
 </style>

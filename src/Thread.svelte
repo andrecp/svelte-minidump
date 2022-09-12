@@ -6,34 +6,47 @@
         DropdownItem,
         Table,
     } from "sveltestrap";
-    export let threadName;
-    export let threadIndex;
+
+    import { selectedThreadIdx } from "./stores.js";
+
+    let isLoading = true;
+
     export let threads;
+    let threadName = "";
+    let selectedThread = null;
+    let _selectThreadIdx = null;
+    selectedThreadIdx.subscribe((value) => {
+        _selectThreadIdx = value;
+        selectedThread = threads[value];
+        threadName = selectedThread.thread_name || value;
+        isLoading = false;
+    });
+
+    function updateSelectedThread(e) {
+        selectedThreadIdx.set(e.target.value);
+    }
 </script>
 
 <h2>Thread</h2>
-<Dropdown>
-    <DropdownToggle caret
-        >{threadName ? threadName : threadIndex}</DropdownToggle
-    >
-    <DropdownMenu>
+{#if isLoading}
+    <p>Fetching thread data</p>
+{:else}
+    <select class="form-select" on:change={updateSelectedThread}>
         {#each threads as thread, idx}
-            <DropdownItem>{thread.name ? thread.name : idx}</DropdownItem>
-        {/each}
-    </DropdownMenu>
-</Dropdown>
-<Table striped>
-    <tbody>
-        <tr>
-            <td>Last Error Value</td>
-            <td
-                >{threads[threadIndex].last_error_value
-                    ? threads[threadIndex].last_error_value
-                    : "n/a"}</td
+            <option selected={idx == _selectThreadIdx} value={idx}
+                >{thread.name || idx}</option
             >
-        </tr>
-    </tbody>
-</Table>
+        {/each}
+    </select>
+    <Table striped>
+        <tbody>
+            <tr>
+                <td>Last Error Value</td>
+                <td>{selectedThread.last_error_value || "n/a"}</td>
+            </tr>
+        </tbody>
+    </Table>
+{/if}
 
 <style>
     :global(.dropdown-menu) {

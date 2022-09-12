@@ -5,44 +5,50 @@
 	import Process from "./Process.svelte";
 	import Thread from "./Thread.svelte";
 
-	const fetchDump = (async () => {
+	import { selectedThreadIdx } from "./stores.js";
+
+	import { onMount } from "svelte";
+
+	let crashDump;
+	let _selectThreadIdx;
+	async function getData() {
 		const response = await fetch("http://localhost:8000/data.json");
-		return await response.json();
-	})();
-	fetchDump.then(function (result) {
-		console.log(result); // "Some User token"
+		const response_json = await response.json();
+		selectedThreadIdx.set(response_json.crashing_thread.threads_index);
+		_selectThreadIdx = response_json.crashing_thread.threads_index;
+		return response_json;
+	}
+
+	onMount(async () => {
+		crashDump = await getData();
 	});
 
-	const threadIdx = 0;
+	selectedThreadIdx.subscribe((value) => {
+		_selectThreadIdx = value;
+	});
 </script>
 
 <Container fluid>
-	{#await fetchDump}
+	{#if !crashDump}
 		<p>Getting the data...</p>
-	{:then fetchDump}
+	{:else}
 		<Row>
 			<Col>
 				<Process
-					threadName={fetchDump.crashing_thread.thread_name}
-					crashInfo={fetchDump.crash_info}
-					systemInfo={fetchDump.system_info}
+					threadName={crashDump.crashing_thread.thread_name}
+					crashInfo={crashDump.crash_info}
+					systemInfo={crashDump.system_info}
 				/>
 			</Col>
 			<Col>
-				<Thread
-					threadName={fetchDump.crashing_thread.thread_name}
-					threadIndex={fetchDump.crashing_thread.threads_index}
-					threads={fetchDump.threads}
-				/>
+				<Thread threads={crashDump.threads} />
 				<Frame />
 			</Col>
 		</Row>
 		<Row>
 			<Col>
-				<Frames frames={fetchDump.threads[threadIdx].frames} />
+				<Frames frames={crashDump.threads[_selectThreadIdx].frames} />
 			</Col>
 		</Row>
-	{:catch error}
-		<p>An error occurred getting the JSON data</p>
-	{/await}
+	{/if}
 </Container>
